@@ -1,12 +1,20 @@
 import pandas as pd
-from nltk.tokenize import word_tokenize
-from collections import defaultdict
-from nltk.corpus import wordnet as wn
-from nltk.stem import WordNetLemmatizer
-from nltk import pos_tag
-from nltk.corpus import stopwords
 import joblib
 from sklearn.metrics import accuracy_score
 
-filepath = interface.openwindow()
-corpus = pd.read_csv(filepath)
+class predict():
+    def NB_predict(corpus, model):
+        # Predict the categories of the test data
+        prediction = model.predict(corpus['text_final'])
+        corpus['NB prediction'] = prediction
+        return corpus
+    def SVM_predict(corpus, model):
+        # Predict the categories of the test data
+        prediction = model.predict(corpus['text_final'])
+        corpus['SVM prediction'] = prediction
+        corpus['SVM probability'] = [[max(i)] for i in model.predict_proba(prediction)]        
+        return corpus
+    def load_model(model_name):
+        model = joblib.load(model_name)
+        return model
+    #def accuraccy_score
