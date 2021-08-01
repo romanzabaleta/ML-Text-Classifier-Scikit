@@ -1,26 +1,26 @@
 import pandas as pd
-import interface as intf
-import data_preperation as dp
-import train_model as tm
-import use_model as um
+import interface
+import data_preperation
+from train_model import train
+import use_model
 
 def main():
-    inter = intf.interface()
+    inter = interface.interface()
     filepath = inter.openwindow()
     corpus = pd.read_csv(filepath)
-    corpus = dp.prep.text_prep(corpus)
+    corpus = data_preperation.prep.text_prep(corpus)
     print(corpus)
     if decision == "train":
-        t = tm.train()
-        SVMmodel = t.SVM_train(corpus = corpus)
-        NBmodel = t.NB_train(corpus = corpus)
-        tm.train.save_model(SVMmodel, "./Models/SVMcorpus")
-        tm.train.save_model(NBmodel, "./Models/NBcorpus")
+        t = train()
+        SVMmodel = t.SVM_train(corpus)
+        NBmodel = t.NB_train(corpus)
+        train_model.train.save_model(SVMmodel, "./Models/SVMcorpus")
+        train_model.train.save_model(NBmodel, "./Models/NBcorpus")
     elif decision == "predict":
-        #SVMmodel = um.predict.load_model("./Models/SVMcorpus")
-        #NBmodel =  um.predict.load_model("./Models/NBcorpus")
-        #NBpredicted_corpus = um.predict.NB_predict(corpus, NBmodel)
-        #SVMpredicted_corpus = um.predict.SVM_predict(corpus, SVMmodel)
+        SVMpmodel = use_model.predict.load_model("./Models/SVMcorpus")
+        NBpmodel =  use_model.predict.load_model("./Models/NBcorpus")
+        NBpredicted_corpus = use_model.predict.NB_predict(corpus, NBpmodel)
+        SVMpredicted_corpus = use_model.predict.SVM_predict(corpus, SVMpmodel)
         return True
 
 decision = "train"
